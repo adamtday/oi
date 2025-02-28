@@ -1,0 +1,22 @@
+name: Update Design Tokens
+
+on:
+  push:
+    paths:
+      - 'figma-tokens.json'
+
+jobs:
+  update-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm ci
+      - run: npx ts-node scripts/process-figma-tokens.ts
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update design tokens
+          file_pattern: app/styles/figma-tokens.css
+
